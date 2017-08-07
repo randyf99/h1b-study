@@ -9,7 +9,7 @@ const Preloader = () =>
       per year (1 standard deviation).
       <span>
         The best city for an H1B is <b>Kirkland, WA</b> with an average individual salary{' '}
-        <b>$39,465 above local household median</b>.Median household salary is a good proxy for cost of living in an
+        <b>$39,465 above local household median</b>. Median household salary is a good proxy for cost of living in an
         area.
       </span>
       <h2 className="text-center">Loading data ...</h2>
