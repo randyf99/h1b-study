@@ -12,8 +12,8 @@ const Preloader = () =>
         <b>$39,465 above local household median</b>. Median household salary is a good proxy for cost of living in an
         area.
       </span>
-      <h2 className="text-center">Loading data ...</h2>
     </p>
+    <h2 className="text-center">Loading data ...</h2>
     <img src={PreloaderImg} style={{ width: '100%' }} role="presentation" />
     <h2 className="test-center">Loading data...</h2>
   </div>;
