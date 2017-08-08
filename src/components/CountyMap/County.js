@@ -19,7 +19,7 @@ class County extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { zoom, value } = this.props;
 
-    return zoom !== nextProps.zoon || value !== nextProps.value;
+    return zoom !== nextProps.zoom || value !== nextProps.value;
   }
 
   render() {
