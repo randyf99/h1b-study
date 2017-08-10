@@ -10,12 +10,18 @@ import Preloader from './components/Preloader';
 import { loadAllData } from './DataHandling';
 import CountyMap from './components/CountyMap';
 import Histogram from './components/Histogram';
+import { Title, Description } from './components/Meta';
 
 class App extends Component {
   state = {
     techSalaries: [],
     countyNames: [],
-    medianIncomes: []
+    medianIncomes: [],
+    filteredBy: {
+      USstate: '*',
+      year: '*',
+      jobTitle: '*'
+    }
   };
 
   componentWillMount() {
@@ -53,6 +59,13 @@ class App extends Component {
 
     return (
       <div className="App container">
+        <Title data={filteredSalaries} filteredBy={this.state.filteredBy} />
+        <Description
+          data={filteredSalaries}
+          allData={this.state.techSalaries}
+          medianIncomesByCounty={this.state.medianIncomesByCounty}
+          filteredBy={this.state.filteredBy}
+        />
         <svg width="1100" height="500">
           <CountyMap
             usTopoJson={this.state.usTopoJson}
