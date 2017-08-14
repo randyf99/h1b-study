@@ -12,12 +12,14 @@ import CountyMap from './components/CountyMap';
 import Histogram from './components/Histogram';
 import { Title, Description } from './components/Meta';
 import MedianLine from './components/MedianLine';
+import Controls from './components/Controls';
 
 class App extends Component {
   state = {
     techSalaries: [],
     countyNames: [],
     medianIncomes: [],
+    salariesFilter: () => true,
     filteredBy: {
       USstate: '*',
       year: '*',
@@ -27,6 +29,24 @@ class App extends Component {
 
   componentWillMount() {
     loadAllData(data => this.setState(data));
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { techSalaries, filteredBy } = this.state;
+
+    const changedSalaries =
+      (techSalaries && techSalaries.length) !== (nextState.techSalaries && nextState.techSalaries.length);
+
+    const changedFilters = Object.keys(filteredBy).some(k => filteredBy[k] !== nextState.filteredBy[k]);
+
+    return changedSalaries || changedFilters;
+  }
+
+  updateDataFilter(filter, filteredBy) {
+    this.setState({
+      salariesFilter: filter,
+      filteredBy: filteredBy
+    });
   }
 
   countyValue(county, techSalariesMap) {
@@ -50,7 +70,7 @@ class App extends Component {
       return <Preloader />;
     }
 
-    const filteredSalaries = this.state.techSalaries;
+    const filteredSalaries = this.state.techSalaries.filter(this.state.salariesFilter);
     const filteredSalariesMap = _.groupBy(filteredSalaries, 'countyID');
     const countyValues = this.state.countyNames
       .map(county => this.countyValue(county, filteredSalariesMap))
@@ -58,6 +78,11 @@ class App extends Component {
 
     let zoom = null;
     let medianHousehold = this.state.medianIncomesByUSState['US'][0].medianIncome;
+
+    if (this.state.filteredBy.USstate !== '*') {
+      zoom = this.state.filteredBy.USstate;
+      medianHousehold = d3.mean(this.state.medianIncomesByUSState[zoom], d => d.medianIncome);
+    }
 
     return (
       <div className="App container">
@@ -79,6 +104,7 @@ class App extends Component {
             height={500}
             zoom={zoom}
           />
+          <rect x="500" y="0" width="500" height="500" style={{ fill: 'white' }} />
           <Histogram
             bins={10}
             width={500}
@@ -101,6 +127,7 @@ class App extends Component {
             value={d => d.base_salary}
           />
         </svg>
+        <Controls data={this.state.techSalaries} updateDataFilter={this.updateDataFilter.bind(this)} />
       </div>
     );
   }
