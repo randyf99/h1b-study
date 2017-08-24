@@ -25,7 +25,7 @@ class CountyMap extends Component {
     if (props.zoom && props.usTopoJson) {
       const us = props.usTopoJson,
         statePaths = topojson.feature(us, us.objects.states).features,
-        id = _.find(props.USstateNames, { code: props.zoon }).id;
+        id = _.find(props.USstateNames, { code: props.zoom }).id;
 
       this.projection.scale(props.width * 4.5);
 

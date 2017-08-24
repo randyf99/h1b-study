@@ -106,7 +106,7 @@ class Description extends Component {
         const city = S(best[0].city).titleCase().s + `, ${best[0].USstate}`;
         const mean = d3mean(best, d => d.base_salary);
 
-        const jobFragment = this.jobTitleFragment.replace('H1B work visas for', '').replace('H1B work visas', '');
+        const jobFragment = this.jobTitleFragment.replace('H1B  work visas for', '').replace('H1B work visas', '');
 
         return (
             <span>

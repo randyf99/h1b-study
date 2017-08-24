@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 export default function D3blackbox(D3render) {
-  return class Blackbox extends Component {
+  return class Blackbox extends React.Component {
     componentDidMount() {
       D3render.call(this);
     }
@@ -12,7 +12,7 @@ export default function D3blackbox(D3render) {
 
     render() {
       const { x, y } = this.props;
-      return <g transform={`translate(${x}, ${y}))`} ref="anchor" />;
+      return <g transform={`translate(${x}, ${y})`} ref="anchor" />;
     }
   };
 }

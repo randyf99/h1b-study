@@ -4,6 +4,17 @@ import _ from 'lodash';
 import Toggle from './Toggle';
 
 class ControlRow extends Component {
+  makePick(picked, newState) {
+    let toggleValues = this.state.toggleValues;
+
+    toggleValues = _.mapValues(toggleValues, (value, key) => newState && key == picked); // eslint-disable-line
+
+    // if newState is false, we want to reset
+    this.props.updateDataFilter(picked, !newState);
+
+    this.setState({ toggleValues: toggleValues });
+  }
+
   componentWillMount() {
     let toggles = this.props.toggleNames;
     const toggleValues = _.zipObject(toggles, toggles.map(name => name === this.props.picked));
@@ -14,16 +25,6 @@ class ControlRow extends Component {
     if (this.props.picked !== nextProps.picked) {
       this.makePick(nextProps.picked, true);
     }
-  }
-  makePick(picked, newState) {
-    let toggleValues = this.state.toggleValues;
-
-    toggleValues = _.mapValues(toggleValues, (value, key) => newState && key == picked); // eslint-disable-line
-
-    // if newState is false, we want to reset
-    this.props.updateDataFilter(picked, !newState);
-
-    this.setState({ toggleValues: toggleValues });
   }
 
   _addToggle(name) {

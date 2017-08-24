@@ -10,7 +10,7 @@ import Preloader from './components/Preloader';
 import { loadAllData } from './DataHandling';
 import CountyMap from './components/CountyMap';
 import Histogram from './components/Histogram';
-import { Title, Description } from './components/Meta';
+import { Title, Description, GraphDescription } from './components/Meta';
 import MedianLine from './components/MedianLine';
 import Controls from './components/Controls';
 
@@ -31,24 +31,6 @@ class App extends Component {
     loadAllData(data => this.setState(data));
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const { techSalaries, filteredBy } = this.state;
-
-    const changedSalaries =
-      (techSalaries && techSalaries.length) !== (nextState.techSalaries && nextState.techSalaries.length);
-
-    const changedFilters = Object.keys(filteredBy).some(k => filteredBy[k] !== nextState.filteredBy[k]);
-
-    return changedSalaries || changedFilters;
-  }
-
-  updateDataFilter(filter, filteredBy) {
-    this.setState({
-      salariesFilter: filter,
-      filteredBy: filteredBy
-    });
-  }
-
   countyValue(county, techSalariesMap) {
     const medianHousehold = this.state.medianIncomes[county.id];
     const salaries = techSalariesMap[county.name];
@@ -63,6 +45,24 @@ class App extends Component {
       countyID: county.id,
       value: median - medianHousehold.medianIncome
     };
+  }
+
+  updateDataFilter(filter, filteredBy) {
+    this.setState({
+      salariesFilter: filter,
+      filteredBy: filteredBy
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { techSalaries, filteredBy } = this.state;
+
+    const changedSalaries =
+      (techSalaries && techSalaries.length) !== (nextState.techSalaries && nextState.techSalaries.length);
+
+    const changedFilters = Object.keys(filteredBy).some(k => filteredBy[k] !== nextState.filteredBy[k]);
+
+    return changedSalaries || changedFilters;
   }
 
   render() {
@@ -93,6 +93,9 @@ class App extends Component {
           medianIncomesByCounty={this.state.medianIncomesByCounty}
           filteredBy={this.state.filteredBy}
         />
+
+        <GraphDescription data={filteredSalaries} filteredBy={this.state.filteredBy} />
+
         <svg width="1100" height="500">
           <CountyMap
             usTopoJson={this.state.usTopoJson}
@@ -104,7 +107,7 @@ class App extends Component {
             height={500}
             zoom={zoom}
           />
-          <rect x="500" y="0" width="500" height="500" style={{ fill: 'white' }} />
+          <rect x="500" y="0" width="600" height="500" style={{ fill: 'white' }} />
           <Histogram
             bins={10}
             width={500}
@@ -128,6 +131,11 @@ class App extends Component {
           />
         </svg>
         <Controls data={this.state.techSalaries} updateDataFilter={this.updateDataFilter.bind(this)} />
+
+        <small>
+          Sources: 2014 US census data for median household incomes, <a href="http://h1bdata.info/">h1bdata.info</a> for
+          tech salaries (filtered by "software")
+        </small>
       </div>
     );
   }

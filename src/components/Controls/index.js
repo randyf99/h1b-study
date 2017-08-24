@@ -12,6 +12,21 @@ class Controls extends Component {
     USstateFilter: () => true,
     USstate: '*'
   };
+
+  componentDidMount() {
+    let [year, USstate, jobTitle] = window.location.hash.replace('#', '').split('-');
+
+    if (year !== '*' && year) {
+      this.updateYearFilter(Number(year));
+    }
+    if (USstate !== '*' && USstate) {
+      this.updateUSstateFilter(USstate);
+    }
+    if (jobTitle !== '*' && jobTitle) {
+      this.updateJobTitleFilter(jobTitle);
+    }
+  }
+
   updateYearFilter(year, reset) {
     let filter = d => d.submit_date.getFullYear() === year;
 
@@ -39,7 +54,7 @@ class Controls extends Component {
     });
   }
   updateUSstateFilter(USstate, reset) {
-    let filter = d => (d.USstate = USstate);
+    let filter = d => d.USstate === USstate;
 
     if (reset || !USstate) {
       filter = () => true;
@@ -51,7 +66,10 @@ class Controls extends Component {
       USstate: USstate
     });
   }
+
   componentDidUpdate() {
+    window.location.hash = [this.state.year || '*', this.state.USstate || '*', this.state.jobTitle || '*'].join('-');
+
     this.reportUpdateUpTheChain();
   }
   reportUpdateUpTheChain() {

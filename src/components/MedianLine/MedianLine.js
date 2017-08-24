@@ -18,10 +18,9 @@ class MedianLine extends Component {
   render() {
     const median = this.props.median || d3.median(this.props.data, this.props.value);
     const line = d3.line()([[0, 5], [this.props.width, 5]]);
-    const tickFormat = this.yScale.tickFormat;
 
     const translate = `translate(${this.props.x}, ${this.yScale(median)})`;
-    const medianLabel = `Median Household: $${tickFormat(median)}`;
+    const medianLabel = `Median Household: $${this.yScale.tickFormat()(median)}`;
 
     return (
       <g className="mean" transform={translate}>
