@@ -13,10 +13,15 @@
     "string": "^3.3.3",
     "topojson": "^3.0.0"
   },
+  "homepage": "https://randyf99.github.io/h1b-study",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "yarn run build && gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^1.0.0"
   }
 }
